@@ -1,0 +1,4 @@
+[flake8]
+ignore =
+    # -- We don't want to limit lines lengths
+    E501

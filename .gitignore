@@ -1,0 +1,6 @@
+/.nova
+/.pytest_cache
+/dist
+__pycache__
+.DS_Store
+.coverage
