@@ -1,6 +1,6 @@
 # pfTools
 
-[![GPL-v3.0](https://img.shields.io/github/license/DidierMalenfant/pfTools)](https://spdx.org/licenses/GPL-3.0-or-later.html) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pf-tools.svg)](https://python.org) [![PyPI - Version](https://img.shields.io/pypi/v/pf-tools.svg)](https://pypi.org/project/pf-tools)
+[![GPL-v3.0](https://img.shields.io/github/license/DidierMalenfant/pfTools)](https://spdx.org/licenses/GPL-3.0-or-later.html) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pf-dev-tools.svg)](https://python.org) [![PyPI - Version](https://img.shields.io/pypi/v/pf-dev-tools.svg)](https://pypi.org/project/pf-dev-tools)
 
 A collection of tools for [Project Freedom](https://didier.malenfant.net/ProjectFreedom/) projects.
 
@@ -18,7 +18,7 @@ It also uses the [git](https://git-scm.com) command. This should come built in o
 
 You can install **pfTools** by typing the following in a terminal window:
 ```console
-pip install pf-tools
+pip install pf-dev-tools
 ```
 
 ### Usage
