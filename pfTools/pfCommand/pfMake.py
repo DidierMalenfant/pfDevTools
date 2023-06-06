@@ -16,7 +16,7 @@ class pfMake:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
-        pfUtils.shellCommand(['scons', '-Q', '-s'])
+        pfUtils.shellCommand('scons -Q -s')
 
     @classmethod
     def name(cls) -> str:

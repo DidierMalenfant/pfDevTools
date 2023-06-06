@@ -27,7 +27,7 @@ class pfEject:
                 raise RuntimeError(f'Volume {self._volume_name} is not mounted.')
 
             print('Ejecting \'' + self._volume_name + '\'.')
-            pfUtils.shellCommand(['diskutil', 'eject', self._volume_name])
+            pfUtils.shellCommand(f'diskutil eject {self._volume_name}')
         else:
             print('Ejecting volumes is only supported on macOS right now.')
 

@@ -60,7 +60,7 @@ class pfInstall:
 
     def run(self) -> None:
         if self._volume_name is None:
-            pfUtils.shellCommand(['scons', '-Q', '-s', 'install'])
+            pfUtils.shellCommand('scons -Q -s install')
             return
 
         # -- In a temporary folder.

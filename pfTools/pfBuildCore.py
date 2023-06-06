@@ -36,7 +36,7 @@ class pfBuildCore:
         core_verilog_files = [str(Path(str(f)).relative_to(core_fpga_folder)) for f in source]
 
         # -- Let's find out how many CPU cores the docker container is set up with
-        result = pfTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm {env["PF_DOCKER_IMAGE"]} grep --count ^processor /proc/cpuinfo'.split(' '),
+        result = pfTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm {env["PF_DOCKER_IMAGE"]} grep --count ^processor /proc/cpuinfo',
                                               silent_mode=True, capture_output=True)
 
         pfTools.pfQfs([str(source[0]), str(target[0]), f'cpus={"max" if len(result) != 1 else result[0]}'] + core_verilog_files[1:]).run()

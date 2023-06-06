@@ -16,7 +16,7 @@ class pfDryRun:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
-        pfUtils.shellCommand(['scons', '--dry-run', '--tree=all', '--debug=explain'])
+        pfUtils.shellCommand('scons --dry-run --tree=all --debug=explain')
 
     @classmethod
     def name(cls) -> str:

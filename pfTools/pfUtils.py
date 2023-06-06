@@ -11,7 +11,7 @@ from typing import List
 # -- Classes
 class pfUtils:
     @classmethod
-    def shellCommand(cls, command_and_args: List[str], from_dir: str = '.', silent_mode=False, env=None, capture_output=False) -> List[str]:
+    def shellCommand(cls, command_and_args: str, from_dir: str = '.', silent_mode=False, env=None, capture_output=False) -> List[str]:
         try:
             merged_env = None
             if env is not None:
@@ -21,7 +21,7 @@ class pfUtils:
 
             output: List[str] = []
 
-            process = subprocess.Popen(command_and_args, cwd=from_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=merged_env)
+            process = subprocess.Popen(command_and_args.split(' '), cwd=from_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=merged_env)
             if silent_mode is False or capture_output is True:
                 for line in iter(process.stdout.readline, ""):
                     line = line.decode("utf-8")
@@ -50,7 +50,7 @@ class pfUtils:
     @classmethod
     def commandExists(cls, command: str) -> bool:
         try:
-            pfUtils.shellCommand(['gcm' if os.name == 'nt' else 'which', command], silent_mode=True)
+            pfUtils.shellCommand(f'{"gcm" if os.name == "nt" else "which"} {command}', silent_mode=True)
         except Exception:
             return False
 

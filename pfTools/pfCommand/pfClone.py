@@ -49,16 +49,14 @@ class pfClone:
 
         print('Cloning core template in \'' + repo_folder + '\'.')
 
-        command_line = ['git', 'clone', '--depth', '1']
+        command_line = 'git clone --depth 1 '
 
         if self._branch_name is not None:
-            command_line.append('--branch')
-            command_line.append(self._branch_name)
+            command_line += f'--branch {self._branch_name} '
         elif self._tag_name is not None:
-            command_line.append('--branch')
-            command_line.append(self._tag_name)
+            command_line += f'--branch {self._tag_name} '
 
-        command_line.append(self._url)
+        command_line += self._url
 
         pfUtils.shellCommand(command_line, from_dir=self._destination_folder, silent_mode=True)
 
