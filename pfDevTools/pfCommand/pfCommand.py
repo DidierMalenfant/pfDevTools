@@ -6,8 +6,8 @@
 import sys
 import getopt
 
-from pfTools.__about__ import __version__
-from pfTools.Exceptions import ArgumentError
+from pfDevTools.__about__ import __version__
+from pfDevTools.Exceptions import ArgumentError
 
 from .pfBuild import pfBuild
 from .pfClean import pfClean

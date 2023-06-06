@@ -10,7 +10,7 @@ from typing import List
 from pathlib import Path
 from datetime import date
 
-from pfTools.pfConfig import pfConfig
+from pfDevTools.pfConfig import pfConfig
 
 from .pfConvert import pfConvert
 from .pfReverse import pfReverse

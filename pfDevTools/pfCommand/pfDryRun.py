@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from pfTools.pfUtils import pfUtils
+from pfDevTools.pfUtils import pfUtils
 
 
 # -- Classes

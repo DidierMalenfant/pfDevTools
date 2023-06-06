@@ -23,10 +23,10 @@ from semver import Version
 from .__about__ import __version__
 
 
-# --- Makes sure current pfTools versions is supported
+# --- Makes sure current pfDevTools versions is supported
 def requires(version: str) -> bool:
     current = Version.parse(__version__, optional_minor_and_patch=True)
     required = Version.parse(version, optional_minor_and_patch=True)
 
     if not (required.major == current.major) and ((current.minor > required.minor) or ((current.minor == required.minor) and (current.patch >= required.patch))) and (required.prerelease == current.prerelease):
-        raise RuntimeError(f'pfTools v{str(current)} is not compatible with the required version v{str(required)}')
+        raise RuntimeError(f'pfDevTools v{str(current)} is not compatible with the required version v{str(required)}')

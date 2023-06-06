@@ -6,7 +6,7 @@ import sys
 import traceback
 
 from .pfCommand import pfCommand
-from pfTools.Exceptions import ArgumentError
+from pfDevTools.Exceptions import ArgumentError
 
 # -- This enables more debugging information for exceptions.
 _debug_on: bool = False

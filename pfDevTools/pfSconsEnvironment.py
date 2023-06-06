@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from pfTools.pfBuildCore import pfBuildCore
+from pfDevTools.pfBuildCore import pfBuildCore
 
 import SCons.Environment
 

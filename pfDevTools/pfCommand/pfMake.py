@@ -2,12 +2,12 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from pfTools.pfUtils import pfUtils
+from pfDevTools.pfUtils import pfUtils
 
 
 # -- Classes
-class pfClean:
-    """A tool to clean the local project."""
+class pfMake:
+    """A tool to make the local project."""
 
     def __init__(self, arguments):
         """Constructor based on command line arguments."""
@@ -16,12 +16,12 @@ class pfClean:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
-        pfUtils.shellCommand('scons -c -Q -s')
+        pfUtils.shellCommand('scons -Q -s')
 
     @classmethod
     def name(cls) -> str:
-        return 'clean'
+        return 'make'
 
     @classmethod
     def usage(cls) -> None:
-        print('   clean                                 - Clean the local project.')
+        print('   make                                  - Make the local project.')

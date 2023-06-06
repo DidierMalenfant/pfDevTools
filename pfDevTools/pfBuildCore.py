@@ -4,7 +4,7 @@
 
 import os
 import shutil
-import pfTools
+import pfDevTools
 
 from typing import List
 from pathlib import Path
@@ -28,7 +28,7 @@ class pfBuildCore:
 
         command_line.append(env['PF_BUILD_FOLDER'])
 
-        pfTools.pfClone(command_line).run()
+        pfDevTools.pfClone(command_line).run()
 
     @classmethod
     def _updateQsfFile(cls, target, source, env):
@@ -37,20 +37,20 @@ class pfBuildCore:
 
         try:
             # -- Let's find out how many CPU cores the docker container is set up with
-            result = pfTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm {env["PF_DOCKER_IMAGE"]} grep --count ^processor /proc/cpuinfo',
-                                                  silent_mode=True, capture_output=True)
+            result = pfDevTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm {env["PF_DOCKER_IMAGE"]} grep --count ^processor /proc/cpuinfo',
+                                                     silent_mode=True, capture_output=True)
         except RuntimeError:
             raise RuntimeError("Cannot start docker container. Are you sure the docker engine is running?")
 
-        pfTools.pfQfs([str(source[0]), str(target[0]), f'cpus={"max" if len(result) != 1 else result[0]}'] + core_verilog_files[1:]).run()
+        pfDevTools.pfQfs([str(source[0]), str(target[0]), f'cpus={"max" if len(result) != 1 else result[0]}'] + core_verilog_files[1:]).run()
 
     @classmethod
     def _installCore(cls, target, source, env):
         # -- If PF_CORE_INSTALL_VOLUME is not defined, we default to POCKET
         core_install_volume = os.environ.get('PF_CORE_INSTALL_VOLUME', 'POCKET')
 
-        pfTools.pfInstall([str(source[0]), core_install_volume]).run()
-        pfTools.pfEject([core_install_volume]).run()
+        pfDevTools.pfInstall([str(source[0]), core_install_volume]).run()
+        pfDevTools.pfEject([core_install_volume]).run()
 
     @classmethod
     def _copyFile(cls, target, source, env):
@@ -89,17 +89,17 @@ class pfBuildCore:
 
     @classmethod
     def _compileBitStream(cls, target, source, env):
-        pfTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm -v {os.path.realpath(env["PF_CORE_FPGA_FOLDER"])}:/build {env["PF_DOCKER_IMAGE"]} quartus_sh --flow compile pf_core')
+        pfDevTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm -v {os.path.realpath(env["PF_CORE_FPGA_FOLDER"])}:/build {env["PF_DOCKER_IMAGE"]} quartus_sh --flow compile pf_core')
 
     @classmethod
     def _packageCore(cls, target, source, env):
-        build_process: pfTools.pfBuild = pfTools.pfBuild([env['PF_CORE_CONFIG_FILE'], env['PF_BUILD_FOLDER'], env['PF_CORE_BITSTREAM_FILE']])
+        build_process: pfDevTools.pfBuild = pfDevTools.pfBuild([env['PF_CORE_CONFIG_FILE'], env['PF_BUILD_FOLDER'], env['PF_CORE_BITSTREAM_FILE']])
         print('Building core...')
         build_process.run()
 
     @classmethod
     def build(cls, env, config_file: str, extra_files: List[str] = []):
-        pfTools.pfUtils.requireCommand('docker')
+        pfDevTools.pfUtils.requireCommand('docker')
 
         env.SetDefault(PF_DOCKER_IMAGE='didiermalenfant/quartus:22.1-apple-silicon')
 
@@ -135,7 +135,7 @@ class pfBuildCore:
 
         env.Command(core_output_bitstream_file, [core_output_qsf_file] + extra_dest_files, pfBuildCore._compileBitStream)
 
-        build_process: pfTools.pfBuild = pfTools.pfBuild([config_file, build_folder, core_output_bitstream_file])
+        build_process: pfDevTools.pfBuild = pfDevTools.pfBuild([config_file, build_folder, core_output_bitstream_file])
         packaged_core = os.path.join(build_folder, build_process.packagedFilename())
         p = env.Command(packaged_core, build_process.dependencies(), pfBuildCore._packageCore)
 

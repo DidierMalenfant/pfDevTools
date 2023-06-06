@@ -6,7 +6,7 @@ import os
 
 from sys import platform
 
-from pfTools.pfUtils import pfUtils
+from pfDevTools.pfUtils import pfUtils
 
 
 # -- Classes

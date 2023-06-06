@@ -10,7 +10,7 @@ import contextlib
 from sys import platform
 
 from distutils.dir_util import copy_tree
-from pfTools.pfUtils import pfUtils
+from pfDevTools.pfUtils import pfUtils
 
 
 # -- Classes

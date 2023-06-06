@@ -25,12 +25,12 @@ dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://didier.malenfant.net/ProjectFreedom/"
-Documentation = "https://github.com/DidierMalenfant/pfTools#readme"
-"Bug Tracker" = "https://github.com/DidierMalenfant/pfTools/issues"
-"Source Code" = "https://github.com/DidierMalenfant/pfTools"
+Documentation = "https://github.com/DidierMalenfant/pfDevTools#readme"
+"Bug Tracker" = "https://github.com/DidierMalenfant/pfDevTools/issues"
+"Source Code" = "https://github.com/DidierMalenfant/pfDevTools"
 
 [tool.hatch.version]
-path = "pfTools/__about__.py"
+path = "pfDevTools/__about__.py"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
@@ -38,7 +38,7 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["pfTools"]
+packages = ["pfDevTools"]
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -47,4 +47,4 @@ dependencies = [
 ]
 
 [project.scripts]
-pf = "pfTools.pfCommand.__main__:main"
+pf = "pfDevTools.pfCommand.__main__:main"
