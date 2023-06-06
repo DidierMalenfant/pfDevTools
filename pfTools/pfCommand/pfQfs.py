@@ -68,7 +68,7 @@ class pfQfs:
             else:
                 raise ArgumentError('Unknown file type for \'' + file + '\'.')
 
-            dest_file.write(file + '\n')
+            dest_file.write(file.replace('\\', '/') + '\n')
 
         dest_file.write('\n' + editing_wrappers[1])
 
