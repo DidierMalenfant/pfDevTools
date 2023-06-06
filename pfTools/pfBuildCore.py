@@ -88,6 +88,10 @@ class pfBuildCore:
         return extra_dest_files
 
     @classmethod
+    def _compileBitStream(cls, target, source, env):
+        pfTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm -v {os.path.realpath(env["PF_CORE_FPGA_FOLDER"])}:/build {env["PF_DOCKER_IMAGE"]} quartus_sh --flow compile pf_core')
+
+    @classmethod
     def _packageCore(cls, target, source, env):
         build_process: pfTools.pfBuild = pfTools.pfBuild([env['PF_CORE_CONFIG_FILE'], env['PF_BUILD_FOLDER'], env['PF_CORE_BITSTREAM_FILE']])
         print('Building core...')
@@ -96,7 +100,6 @@ class pfBuildCore:
     @classmethod
     def build(cls, env, config_file: str, extra_files: List[str] = []):
         env.SetDefault(PF_DOCKER_IMAGE='didiermalenfant/quartus:22.1-apple-silicon')
-        docker_image = env['PF_DOCKER_IMAGE']
 
         if env.get('PF_SRC_FOLDER', None) is None:
             env.SetDefault(PF_SRC_FOLDER=Path(config_file).parent)
@@ -128,8 +131,7 @@ class pfBuildCore:
 
         env.Command(core_output_qsf_file, [core_input_qsf_file] + dest_verilog_files, pfBuildCore._updateQsfFile)
 
-        env.Command(core_output_bitstream_file, [core_output_qsf_file] + extra_dest_files,
-                    f'docker run --platform linux/amd64 -t --rm -v {os.path.realpath(core_fpga_folder)}:/build {docker_image} quartus_sh --flow compile pf_core')
+        env.Command(core_output_bitstream_file, [core_output_qsf_file] + extra_dest_files, pfBuildCore._compileBitStream)
 
         build_process: pfTools.pfBuild = pfTools.pfBuild([config_file, build_folder, core_output_bitstream_file])
         packaged_core = os.path.join(build_folder, build_process.packagedFilename())
