@@ -99,6 +99,8 @@ class pfBuildCore:
 
     @classmethod
     def build(cls, env, config_file: str, extra_files: List[str] = []):
+        pfTools.pfUtils.requireCommand('docker')
+
         env.SetDefault(PF_DOCKER_IMAGE='didiermalenfant/quartus:22.1-apple-silicon')
 
         if env.get('PF_SRC_FOLDER', None) is None:
