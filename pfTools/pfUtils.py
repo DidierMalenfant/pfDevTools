@@ -4,8 +4,21 @@
 
 import subprocess
 import os
+import shutil
+import errno
+import stat
 
 from typing import List
+
+
+# -- Functions
+def _handleRemoveReadonly(func, path, exc):
+    excvalue = exc[1]
+    if func in (os.rmdir, os.remove, os.unlink) and excvalue.errno == errno.EACCES:
+        os.chmod(path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # -- 0777
+        func(path)
+    else:
+        raise
 
 
 # -- Classes
@@ -60,3 +73,15 @@ class pfUtils:
     def requireCommand(cls, command: str):
         if not pfUtils.commandExists(command):
             raise RuntimeError('❌ Cannot find command \'' + command + '\'.')
+
+    @classmethod
+    def deleteFolder(cls, folder: str, force_delete: bool = False):
+        if os.path.exists(folder):
+            if force_delete is True:
+                ignore_errors = False
+                on_error = _handleRemoveReadonly
+            else:
+                ignore_errors = True
+                on_error = None
+
+            shutil.rmtree(folder, ignore_errors=ignore_errors, onerror=on_error)

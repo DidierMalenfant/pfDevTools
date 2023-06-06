@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
-import shutil
 
 from pfTools.pfUtils import pfUtils
 from pfTools.Exceptions import ArgumentError
@@ -45,7 +44,7 @@ class pfClone:
 
         repo_folder = os.path.join(self._destination_folder, 'pfCoreTemplate')
         if os.path.exists(repo_folder):
-            shutil.rmtree(repo_folder)
+            pfUtils.deleteFolder(repo_folder, force_delete=True)
 
         print('Cloning core template in \'' + repo_folder + '\'.')
 
@@ -62,7 +61,7 @@ class pfClone:
 
         git_folder = os.path.join(repo_folder, '.git')
         if os.path.exists(git_folder):
-            shutil.rmtree(git_folder)
+            pfUtils.deleteFolder(git_folder, force_delete=True)
 
     @classmethod
     def name(cls) -> str:
