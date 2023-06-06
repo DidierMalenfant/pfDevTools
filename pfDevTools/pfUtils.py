@@ -11,18 +11,17 @@ import stat
 from typing import List
 
 
-# -- Functions
-def _handleRemoveReadonly(func, path, exc):
-    excvalue = exc[1]
-    if func in (os.rmdir, os.remove, os.unlink) and excvalue.errno == errno.EACCES:
-        os.chmod(path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # -- 0777
-        func(path)
-    else:
-        raise
-
-
 # -- Classes
 class pfUtils:
+    @classmethod
+    def _handleRemoveReadonly(cls, func, path, exc):
+        excvalue = exc[1]
+        if func in (os.rmdir, os.remove, os.unlink) and excvalue.errno == errno.EACCES:
+            os.chmod(path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # -- 0777
+            func(path)
+        else:
+            raise
+
     @classmethod
     def shellCommand(cls, command_and_args: str, from_dir: str = '.', silent_mode=False, env=None, capture_output=False) -> List[str]:
         try:
@@ -79,7 +78,7 @@ class pfUtils:
         if os.path.exists(folder):
             if force_delete is True:
                 ignore_errors = False
-                on_error = _handleRemoveReadonly
+                on_error = pfUtils._handleRemoveReadonly
             else:
                 ignore_errors = True
                 on_error = None
