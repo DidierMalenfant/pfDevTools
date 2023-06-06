@@ -64,6 +64,7 @@ class pfUtils:
     def commandExists(cls, command: str) -> bool:
         try:
             pfUtils.shellCommand(f'{"gcm" if os.name == "nt" else "which"} {command}', silent_mode=True)
+            pfUtils.shellCommand(f'{"where" if os.name == "nt" else "which"} {command}', silent_mode=True)
         except Exception:
             return False
 
