@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
+import pfDevTools
 
 from sys import platform
 
@@ -16,18 +17,21 @@ class pfEject:
     def __init__(self, arguments):
         """Constructor based on command line arguments."""
 
-        if len(arguments) != 1:
+        nb_of_arguments = len(arguments)
+        if nb_of_arguments == 0:
+            self._volume_path = pfDevTools.pfConfig.coreInstallVolumePath()
+        elif nb_of_arguments == 1:
+            self._volume_path = arguments[0]
+        else:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
-        self._volume_name = arguments[0]
-
     def run(self) -> None:
+        if not os.path.exists(self._volume_path):
+            raise RuntimeError(f'Volume {self._volume_path} is not mounted.')
+    
         if platform == "darwin":
-            if not os.path.exists(os.path.join('/Volumes', self._volume_name)):
-                raise RuntimeError(f'Volume {self._volume_name} is not mounted.')
-
-            print('Ejecting \'' + self._volume_name + '\'.')
-            pfUtils.shellCommand(f'diskutil eject {self._volume_name}')
+            print(f'Ejecting {self._volume_path}.')
+            pfUtils.shellCommand(f'diskutil eject {self._volume_path}')
         else:
             print('Ejecting volumes is only supported on macOS right now.')
 

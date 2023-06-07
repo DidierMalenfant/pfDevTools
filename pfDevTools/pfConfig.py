@@ -5,6 +5,8 @@
 import os
 
 from typing import Dict
+from sys import platform
+
 from .Exceptions import ArgumentError
 
 try:
@@ -111,3 +113,15 @@ class pfConfig:
 
     def fullPlatformName(self) -> str:
         return f'{self.authorName()}.{self.platformShortName()}'
+
+    @classmethod
+    def coreInstallVolumePath(cls) -> str:
+        volume_path: str = os.environ.get('PF_CORE_INSTALL_VOLUME', None)
+        if volume_path is None:
+            if platform == "darwin":
+                # -- On macOS, if PF_CORE_INSTALL_VOLUME is not defined, we default to POCKET
+                volume_path = os.path.join('/Volumes', 'POCKET')
+            else:
+                raise RuntimeError('PF_CORE_INSTALL_VOLUME is not defined in the environment.')
+
+        return volume_path

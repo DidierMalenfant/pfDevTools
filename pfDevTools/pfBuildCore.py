@@ -46,11 +46,8 @@ class pfBuildCore:
 
     @classmethod
     def _installCore(cls, target, source, env):
-        # -- If PF_CORE_INSTALL_VOLUME is not defined, we default to POCKET
-        core_install_volume = os.environ.get('PF_CORE_INSTALL_VOLUME', 'POCKET')
-
-        pfDevTools.pfInstall([str(source[0]), core_install_volume]).run()
-        pfDevTools.pfEject([core_install_volume]).run()
+        pfDevTools.pfInstall([str(source[0])]).run()
+        pfDevTools.pfEject([]).run()
 
     @classmethod
     def _copyFile(cls, target, source, env):

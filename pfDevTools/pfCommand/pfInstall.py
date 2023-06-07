@@ -6,11 +6,10 @@ import os
 import zipfile
 import tempfile
 import contextlib
+import pfDevTools
 
 from sys import platform
-
 from distutils.dir_util import copy_tree
-from pfDevTools.pfUtils import pfUtils
 
 
 # -- Classes
@@ -21,14 +20,21 @@ class pfInstall:
         """Constructor based on command line arguments."""
 
         self._zip_filename = None
-        self._volume_name = None
+        self._volume_path = None
 
-        if len(arguments) != 0:
-            if len(arguments) != 2:
+        nb_of_arguments = len(arguments)
+        if nb_of_arguments != 0:
+            if nb_of_arguments == 2:
+                self._volume_path = arguments[1]
+                arguments = arguments[:0]
+                nb_of_arguments -= 1
+            else:
+                self._volume_path = pfDevTools.pfConfig.coreInstallVolumePath()
+
+            if nb_of_arguments != 1:
                 raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
             self._zip_filename = arguments[0]
-            self._volume_name = arguments[1]
 
             components = os.path.splitext(self._zip_filename)
             if len(components) != 2 or components[1] != '.zip':
@@ -37,30 +43,22 @@ class pfInstall:
             if not os.path.exists(self._zip_filename):
                 raise RuntimeError('File \'' + self._zip_filename + '\' does not exist.')
 
-    def _destVolume(self) -> str:
-        if platform == "darwin":
-            volume_path = os.path.join('/Volumes', self._volume_name)
-        else:
-            print('Installing cores is only supported on macOS right now.')
-
-        if not os.path.exists(volume_path):
-            raise RuntimeError(f'Volume {self._volume_name} is not mounted.')
-
-        return volume_path
+            if not os.path.exists(self._volume_path):
+                raise RuntimeError(f'Volume {self._volume_path} is not mounted.')
 
     def _destCoresFolder(self) -> str:
-        return os.path.join(self._destVolume(), 'Cores')
+        return os.path.join(self._volume_path, 'Cores')
 
     def _destPlatformsFolder(self) -> str:
-        return os.path.join(self._destVolume(), 'Platforms')
+        return os.path.join(self._volume_path, 'Platforms')
 
     def _deleteFile(self, filepath) -> None:
         with contextlib.suppress(FileNotFoundError):
             os.remove(filepath)
 
     def run(self) -> None:
-        if self._volume_name is None:
-            pfUtils.shellCommand('scons -Q -s install')
+        if self._volume_path is None:
+            pfDevTools.pfUtils.shellCommand('scons -Q -s install')
             return
 
         # -- In a temporary folder.
@@ -97,4 +95,4 @@ class pfInstall:
 
     @classmethod
     def usage(cls) -> None:
-        print('   install <zip_file> <dest_volume>        - Install core on volume.')
+        print(f'   install zip_file <{"dest_volume" if platform == "darwin" else "volume_path"}>        - Install core on volume.')

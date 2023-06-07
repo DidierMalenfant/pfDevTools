@@ -5,6 +5,7 @@
 import os
 import shutil
 import contextlib
+import pfDevTools
 
 from pathlib import Path
 
@@ -16,17 +17,24 @@ class pfDelete:
     def __init__(self, arguments):
         """Constructor based on command line arguments."""
 
-        if len(arguments) != 2:
+        nb_of_arguments = len(arguments)
+        if nb_of_arguments == 2:
+            self._volume_path = arguments[1]
+            arguments = arguments[:0]
+            nb_of_arguments -= 1
+        else:
+            self._volume_path = pfDevTools.pfConfig.coreInstallVolumePath()
+
+        if len(arguments) != 1:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
         self._name_of_core_to_delete: str = arguments[0]
-        self._volume_name: str = arguments[1]
 
     def _destCoresFolder(self) -> str:
-        return os.path.join('/Volumes', self._volume_name, 'Cores')
+        return os.path.join(self._volume_path, 'Cores')
 
     def _destPlatformsFolder(self) -> str:
-        return os.path.join('/Volumes', self._volume_name, 'Platforms')
+        return os.path.join(self._volume_path, 'Platforms')
 
     def _deleteFile(self, filepath) -> None:
         with contextlib.suppress(FileNotFoundError):
@@ -91,4 +99,4 @@ class pfDelete:
 
     @classmethod
     def usage(cls) -> None:
-        print('   delete core_name dest_volume          - Delete core on volume.')
+        print('   delete core_name <dest_volume>        - Delete core on volume.')
