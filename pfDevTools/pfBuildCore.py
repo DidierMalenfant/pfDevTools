@@ -20,11 +20,11 @@ class pfBuildCore:
 
         url = env.get('PF_CORE_TEMPLATE_REPO_URL', None)
         if url is not None:
-            command_line += [url]
+            command_line.append(url)
 
         tag = env.get('PF_CORE_TEMPLATE_REPO_TAG', None)
         if tag is not None:
-            command_line += ['tag', tag]
+            command_line.append(f'tag={tag}')
 
         command_line.append(env['PF_BUILD_FOLDER'])
 

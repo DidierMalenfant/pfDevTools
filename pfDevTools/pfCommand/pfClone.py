@@ -15,26 +15,24 @@ class pfClone:
     def __init__(self, arguments):
         """Constructor based on command line arguments."""
 
-        nb_of_arguments = len(arguments)
-
-        self._branch_name: str = None
         self._tag_name: str = None
         self._url: str = 'https://github.com/DidierMalenfant/pfCoreTemplate.git'
 
-        if nb_of_arguments == 2 or nb_of_arguments == 4:
+        nb_of_arguments = len(arguments)
+        if nb_of_arguments == 1 or nb_of_arguments == 3:
             self._url: str = arguments[0]
             nb_of_arguments -= 1
             arguments = arguments[1:]
 
-        if nb_of_arguments == 1:
+        if nb_of_arguments == 0:
             self._destination_folder: str = arguments[0]
-        elif nb_of_arguments == 3:
-            if arguments[0] == 'tag':
-                self._tag_name = arguments[1]
+        elif nb_of_arguments == 2:
+            if arguments[0].startswith('tag='):
+                self._tag_name = arguments[0][4:]
             else:
                 raise ArgumentError('Invalid cloning arguments. Maybe start with `pf --help?')
 
-            self._destination_folder: str = arguments[2]
+            self._destination_folder: str = arguments[1]
         else:
             raise ArgumentError('Invalid arguments. Maybe start with `pf --help?')
 
@@ -50,9 +48,7 @@ class pfClone:
 
         command_line = 'git clone --depth 1 '
 
-        if self._branch_name is not None:
-            command_line += f'--branch {self._branch_name} '
-        elif self._tag_name is not None:
+        if self._tag_name is not None:
             command_line += f'--branch {self._tag_name} '
 
         command_line += self._url
@@ -69,5 +65,5 @@ class pfClone:
 
     @classmethod
     def usage(cls) -> None:
-        print('   clone <url> <tag name> dest_folder    - Clone repo at url, optionally at a given tag.')
+        print('   clone <url> <tag=name> dest_folder    - Clone repo at url, optionally at a given tag/branch.')
         print('                                           (url defaults to pfCoreTemplate\'s repo if missing).')
