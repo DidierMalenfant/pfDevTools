@@ -4,13 +4,13 @@
 
 import sys
 
-from .pfCommand.pfBuild import pfBuild
 from .pfCommand.pfClone import pfClone
 from .pfCommand.pfConvert import pfConvert
 from .pfCommand.pfDelete import pfDelete
 from .pfCommand.pfEject import pfEject
 from .pfCommand.pfInstall import pfInstall
 from .pfCommand.pfMake import pfMake
+from .pfCommand.pfPackage import pfPackage
 from .pfCommand.pfQfs import pfQfs
 from .pfCommand.pfReverse import pfReverse
 

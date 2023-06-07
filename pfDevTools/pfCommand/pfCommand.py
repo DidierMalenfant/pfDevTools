@@ -9,7 +9,6 @@ import getopt
 from pfDevTools.__about__ import __version__
 from pfDevTools.Exceptions import ArgumentError
 
-from .pfBuild import pfBuild
 from .pfClean import pfClean
 from .pfClone import pfClone
 from .pfConvert import pfConvert
@@ -18,6 +17,7 @@ from .pfDryRun import pfDryRun
 from .pfEject import pfEject
 from .pfInstall import pfInstall
 from .pfMake import pfMake
+from .pfPackage import pfPackage
 from .pfQfs import pfQfs
 from .pfReverse import pfReverse
 
@@ -30,7 +30,7 @@ class pfCommand:
         """Constructor based on command line arguments."""
 
         try:
-            self._commands = [pfBuild, pfClean, pfClone, pfConvert, pfDelete, pfDryRun, pfEject, pfInstall, pfMake, pfQfs, pfReverse]
+            self._commands = [pfClean, pfClone, pfConvert, pfDelete, pfDryRun, pfEject, pfInstall, pfMake, pfPackage, pfQfs, pfReverse]
 
             # -- Gather the arguments
             opts, arguments = getopt.getopt(args, 'dhv', ['debug', 'help', 'version'])

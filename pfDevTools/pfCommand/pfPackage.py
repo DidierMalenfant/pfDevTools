@@ -17,8 +17,8 @@ from .pfReverse import pfReverse
 
 
 # -- Classes
-class pfBuild:
-    """A tool to build an analog pocket core"""
+class pfPackage:
+    """A tool to package an analog pocket core"""
 
     def __init__(self, arguments):
         """Constructor based on command line arguments."""
@@ -27,8 +27,8 @@ class pfBuild:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
         self._config = pfConfig(arguments[0])
-        self._destination_folder: str = arguments[1]
-        self._bitstream_file: str = arguments[2]
+        self._bitstream_file: str = arguments[1]
+        self._destination_folder: str = arguments[2]
         self._core_folder = os.path.join(self._destination_folder, '_core')
         self._today = str(date.today())
 
@@ -221,5 +221,5 @@ class pfBuild:
 
     @classmethod
     def usage(cls) -> None:
-        print('   build config_file dest_folder bistream_file')
+        print('   build config_file bistream_file dest_folder')
         print('                                         - Build core according to a config_file.')

@@ -93,7 +93,7 @@ class pfBuildCore:
 
     @classmethod
     def _packageCore(cls, target, source, env):
-        build_process: pfDevTools.pfBuild = pfDevTools.pfBuild([env['PF_CORE_CONFIG_FILE'], env['PF_BUILD_FOLDER'], env['PF_CORE_BITSTREAM_FILE']])
+        build_process: pfDevTools.pfPackage = pfDevTools.pfPackage([env['PF_CORE_CONFIG_FILE'], env['PF_CORE_BITSTREAM_FILE'], env['PF_BUILD_FOLDER']])
         print('Building core...')
         build_process.run()
 
@@ -135,7 +135,7 @@ class pfBuildCore:
 
         env.Command(core_output_bitstream_file, [core_output_qsf_file] + extra_dest_files, pfBuildCore._compileBitStream)
 
-        build_process: pfDevTools.pfBuild = pfDevTools.pfBuild([config_file, build_folder, core_output_bitstream_file])
+        build_process: pfDevTools.pfPackage = pfDevTools.pfPackage([config_file, core_output_bitstream_file, build_folder])
         packaged_core = os.path.join(build_folder, build_process.packagedFilename())
         p = env.Command(packaged_core, build_process.dependencies(), pfBuildCore._packageCore)
 
