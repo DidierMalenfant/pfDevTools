@@ -130,7 +130,7 @@ class pfBuildCore:
 
         env.Command(core_output_qsf_file, [core_input_qsf_file] + dest_verilog_files, pfBuildCore._updateQsfFile)
 
-        env.Command(core_output_bitstream_file, [core_output_qsf_file] + extra_dest_files, pfBuildCore._compileBitStream)
+        env.Command(core_output_bitstream_file, [core_output_qsf_file] + dest_verilog_files + extra_dest_files, pfBuildCore._compileBitStream)
 
         build_process: pfDevTools.pfPackage = pfDevTools.pfPackage([config_file, core_output_bitstream_file, build_folder])
         packaged_core = os.path.join(build_folder, build_process.packagedFilename())
