@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
+import sys
 import shutil
 import pfDevTools
 
@@ -31,18 +32,56 @@ class pfBuildCore:
         pfDevTools.pfClone(command_line).run()
 
     @classmethod
+    def _runDockerCommand(cls, image: str, command: str, build_folder: str = None, quiet: bool = True):
+        command_line: str = 'docker run --platform linux/amd64 -t --rm '
+
+        if build_folder is not None:
+            command_line += f'-v {build_folder}:/build '
+
+        command_line += image + ' ' + command
+
+        return pfDevTools.pfUtils.shellCommand(command_line, silent_mode=quiet, capture_output=True)
+
+    @classmethod
+    def _dockerIsRunning(cls, env) -> bool:
+        try:
+            pfDevTools.pfUtils.shellCommand('docker ps', silent_mode=True, capture_output=False)
+        except RuntimeError:
+            return False
+
+        return True
+
+    @classmethod
+    def _dockerHasImage(cls, env) -> bool:
+        result = pfDevTools.pfUtils.shellCommand('docker images', silent_mode=True, capture_output=True)
+
+        image_info = env['PF_DOCKER_IMAGE'].split(':')
+        if len(image_info) == 2:
+            looking_for = f'{image_info[0]}   {image_info[1]}'
+            for line in result:
+                if line.startswith(looking_for):
+                    return True
+
+        return False
+
+    @classmethod
+    def _getNumberOfDockerCPUs(cls, env, quiet: bool = True) -> int:
+        number_of_cpus: int = 1
+
+        result = pfBuildCore._runDockerCommand(env['PF_DOCKER_IMAGE'], 'grep --count ^processor /proc/cpuinfo', quiet=quiet)
+        if len(result) == 1:
+            num_cpus_found: int = int(result[0])
+            if num_cpus_found != 0:
+                number_of_cpus = num_cpus_found
+
+        return number_of_cpus
+
+    @classmethod
     def _updateQsfFile(cls, target, source, env):
         core_fpga_folder = env['PF_CORE_FPGA_FOLDER']
         core_verilog_files = [str(Path(str(f)).relative_to(core_fpga_folder)) for f in source]
-
-        try:
-            # -- Let's find out how many CPU cores the docker container is set up with
-            result = pfDevTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm {env["PF_DOCKER_IMAGE"]} grep --count ^processor /proc/cpuinfo',
-                                                     silent_mode=True, capture_output=True)
-        except RuntimeError:
-            raise RuntimeError("Cannot start docker container. Are you sure the docker engine is running?")
-
-        pfDevTools.pfQfs([str(source[0]), str(target[0]), f'cpus={"max" if len(result) != 1 else result[0]}'] + core_verilog_files[1:]).run()
+        number_of_cpus: int = pfBuildCore._getNumberOfDockerCPUs(env)
+        pfDevTools.pfQfs([str(source[0]), str(target[0]), f'cpus={number_of_cpus}'] + core_verilog_files[1:]).run()
 
     @classmethod
     def _installCore(cls, target, source, env):
@@ -86,19 +125,30 @@ class pfBuildCore:
 
     @classmethod
     def _compileBitStream(cls, target, source, env):
-        pfDevTools.pfUtils.shellCommand(f'docker run --platform linux/amd64 -t --rm -v {os.path.realpath(env["PF_CORE_FPGA_FOLDER"])}:/build {env["PF_DOCKER_IMAGE"]} quartus_sh --flow compile pf_core')
+        print('Compiling core bitstream...')
+        pfBuildCore._runDockerCommand(env['PF_DOCKER_IMAGE'],
+                                      'quartus_sh --flow compile pf_core',
+                                      build_folder=os.path.realpath(env['PF_CORE_FPGA_FOLDER']),
+                                      quiet=False)
 
     @classmethod
     def _packageCore(cls, target, source, env):
         build_process: pfDevTools.pfPackage = pfDevTools.pfPackage([env['PF_CORE_CONFIG_FILE'], env['PF_CORE_BITSTREAM_FILE'], env['PF_BUILD_FOLDER']])
-        print('Building core...')
+        print('Packaging core...')
         build_process.run()
 
     @classmethod
-    def build(cls, env, config_file: str, extra_files: List[str] = []):
+    def _main(cls, env, config_file: str, extra_files: List[str] = []):
         pfDevTools.pfUtils.requireCommand('docker')
 
+        if not pfBuildCore._dockerIsRunning(env):
+            raise RuntimeError('Docker engine does not seem to be running.')
+
         env.SetDefault(PF_DOCKER_IMAGE='didiermalenfant/quartus:22.1-apple-silicon')
+
+        if not pfBuildCore._dockerHasImage(env):
+            print(f'Docker needs to download image \'{env["PF_DOCKER_IMAGE"]}\'. This may take a while...')
+            pfBuildCore._getNumberOfDockerCPUs(env)
 
         if env.get('PF_SRC_FOLDER', None) is None:
             env.SetDefault(PF_SRC_FOLDER=Path(config_file).parent)
@@ -129,7 +179,6 @@ class pfBuildCore:
         extra_dest_files: List[str] = pfBuildCore._addExtraFiles(env, src_folder, dest_verilog_folder, extra_files)
 
         env.Command(core_output_qsf_file, [core_input_qsf_file] + dest_verilog_files, pfBuildCore._updateQsfFile)
-
         env.Command(core_output_bitstream_file, [core_output_qsf_file] + dest_verilog_files + extra_dest_files, pfBuildCore._compileBitStream)
 
         build_process: pfDevTools.pfPackage = pfDevTools.pfPackage([config_file, core_output_bitstream_file, build_folder])
@@ -141,5 +190,19 @@ class pfBuildCore:
 
         install_command = env.Command(None, packaged_core, pfBuildCore._installCore)
         env.Alias('install', install_command)
+
+        return p
+
+    @classmethod
+    def build(cls, env, config_file: str, extra_files: List[str] = []):
+        try:
+            p = pfBuildCore._main(env, config_file, extra_files)
+        except Exception as e:
+            error_string = str(e)
+
+            if len(error_string) != 0:
+                print(e)
+
+            sys.exit(1)
 
         return p
