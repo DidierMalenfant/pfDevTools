@@ -44,9 +44,9 @@ Cleans the local project and deletes any intermediate build files. This should b
 ```console
   pf clone <url> <tag=name> dest_folder
 ```
-Clones the repo found at `url`, optionally at a given tag/branch named `name` into the folder `dest_folder`.
+Clones the repo found at `url`, optionally at a given tag/branch named `name` into the folder `dest_folder`. 'url' does not need to be pre-fixed with `https://` or post-fixed with `.git`.
 
-If `url` is missing then `https://github.com/DidierMalenfant/pfCoreTemplate.git` is used.
+If `url` is missing then `github.com/DidierMalenfant/pfCoreTemplate` is used.
 
 #### `convert` command
 ```console

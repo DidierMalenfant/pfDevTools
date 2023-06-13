@@ -19,6 +19,7 @@ from .pfCommand.Reverse import Reverse
 from .SCons import SConsEnvironment
 from .CoreConfig import CoreConfig
 from .Utils import Utils
+from .Git import Git
 
 from semver import Version
 

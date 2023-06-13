@@ -4,6 +4,7 @@
 
 import os
 import pfDevTools.Utils
+import pfDevTools.Git
 
 from pfDevTools.Exceptions import ArgumentError
 
@@ -16,7 +17,7 @@ class Clone:
         """Constructor based on command line arguments."""
 
         self._tag_name: str = None
-        self._url: str = 'https://github.com/DidierMalenfant/pfCoreTemplate.git'
+        self._url: str = 'github.com/DidierMalenfant/pfCoreTemplate'
 
         nb_of_arguments = len(arguments)
         if nb_of_arguments == 1 or nb_of_arguments == 3:
@@ -37,23 +38,13 @@ class Clone:
             raise ArgumentError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
-        if pfDevTools.Utils.commandExists('git') is False:
-            raise RuntimeError('You must have git installed on your machine to continue.')
-
         repo_folder = os.path.join(self._destination_folder, 'pfCoreTemplate')
         if os.path.exists(repo_folder):
             pfDevTools.Utils.deleteFolder(repo_folder, force_delete=True)
 
         print('Cloning core template in \'' + repo_folder + '\'.')
 
-        command_line = 'git clone --depth 1 '
-
-        if self._tag_name is not None:
-            command_line += f'--branch {self._tag_name} '
-
-        command_line += self._url
-
-        pfDevTools.Utils.shellCommand(command_line, from_dir=self._destination_folder, silent_mode=True)
+        pfDevTools.Git(self._url).cloneIn(repo_folder, self._tag_name)
 
         git_folder = os.path.join(repo_folder, '.git')
         if os.path.exists(git_folder):
