@@ -16,7 +16,7 @@ except ModuleNotFoundError:
 
 
 # -- Classes
-class pfConfig:
+class CoreConfig:
     """A class for openFPGA core configurations"""
 
     def __init__(self, config_filename: str):

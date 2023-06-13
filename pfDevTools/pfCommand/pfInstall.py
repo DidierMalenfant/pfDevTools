@@ -6,7 +6,8 @@ import os
 import zipfile
 import tempfile
 import contextlib
-import pfDevTools
+import pfDevTools.Utils
+import pfDevTools.CoreConfig
 
 from sys import platform
 from distutils.dir_util import copy_tree
@@ -29,7 +30,7 @@ class pfInstall:
                 arguments = arguments[:0]
                 nb_of_arguments -= 1
             else:
-                self._volume_path = pfDevTools.pfConfig.coreInstallVolumePath()
+                self._volume_path = pfDevTools.CoreConfig.coreInstallVolumePath()
 
             if nb_of_arguments != 1:
                 raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')

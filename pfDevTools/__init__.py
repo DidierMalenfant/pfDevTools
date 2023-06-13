@@ -15,7 +15,7 @@ from .pfCommand.pfQfs import pfQfs
 from .pfCommand.pfReverse import pfReverse
 
 from .SCons import SConsEnvironment
-from .pfConfig import pfConfig
+from .CoreConfig import CoreConfig
 from .Utils import Utils
 
 from semver import Version

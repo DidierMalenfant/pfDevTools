@@ -5,12 +5,11 @@
 import os
 import shutil
 import zipfile
+import pfDevTools.CoreConfig
 
 from typing import List
 from pathlib import Path
 from datetime import date
-
-from pfDevTools.pfConfig import pfConfig
 
 from .pfConvert import pfConvert
 from .pfReverse import pfReverse
@@ -26,7 +25,7 @@ class pfPackage:
         if len(arguments) != 3:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
-        self._config = pfConfig(arguments[0])
+        self._config = pfDevTools.CoreConfig(arguments[0])
         self._bitstream_file: str = arguments[1]
         self._destination_folder: str = arguments[2]
         self._core_folder = os.path.join(self._destination_folder, '_core')

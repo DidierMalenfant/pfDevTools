@@ -4,10 +4,10 @@
 
 import os
 import pfDevTools
+import pfDevTools.Utils
+import pfDevTools.CoreConfig
 
 from sys import platform
-
-import pfDevTools.Utils
 
 
 # -- Classes
@@ -19,7 +19,7 @@ class pfEject:
 
         nb_of_arguments = len(arguments)
         if nb_of_arguments == 0:
-            self._volume_path = pfDevTools.pfConfig.coreInstallVolumePath()
+            self._volume_path = pfDevTools.CoreConfig.coreInstallVolumePath()
         elif nb_of_arguments == 1:
             self._volume_path = arguments[0]
         else:

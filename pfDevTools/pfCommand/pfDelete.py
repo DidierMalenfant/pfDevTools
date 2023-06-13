@@ -23,7 +23,7 @@ class pfDelete:
             arguments = arguments[:0]
             nb_of_arguments -= 1
         else:
-            self._volume_path = pfDevTools.pfConfig.coreInstallVolumePath()
+            self._volume_path = pfDevTools.CoreConfig.coreInstallVolumePath()
 
         if len(arguments) != 1:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
