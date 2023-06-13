@@ -7,6 +7,7 @@ import os
 import shutil
 import errno
 import stat
+import time
 
 from typing import List
 
@@ -84,3 +85,10 @@ class Utils:
                 on_error = None
 
             shutil.rmtree(folder, ignore_errors=ignore_errors, onerror=on_error)
+
+    @classmethod
+    def fileOlderThan(cls, path: str, time_in_seconds: int):
+        if not os.path.exists(path):
+            return True
+
+        return (time.time() - os.path.getmtime(path)) > time_in_seconds
