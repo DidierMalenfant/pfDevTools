@@ -2,14 +2,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from pfDevTools.pfBuildCore import pfBuildCore
-
+import pfDevTools.OpenFPGACore
 import SCons.Environment
 
 
 def SConsEnvironment(**kwargs):
     env = SCons.Environment.Environment(**kwargs)
 
-    env.AddMethod(pfBuildCore.build, 'OpenFPGACore')
+    env.AddMethod(pfDevTools.OpenFPGACore.build, 'OpenFPGACore')
 
     return env
