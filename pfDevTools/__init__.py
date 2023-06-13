@@ -29,4 +29,4 @@ def requires(version: str) -> bool:
     required = Version.parse(version, optional_minor_and_patch=True)
 
     if not (required.major == current.major) and ((current.minor > required.minor) or ((current.minor == required.minor) and (current.patch >= required.patch))) and (required.prerelease == current.prerelease):
-        raise RuntimeError(f'pfDevTools v{str(current)} is not compatible with the required version v{str(required)}')
+        raise RuntimeError(f'pfDevTools v{str(current)} is not compatible with the required version v{str(required)}.')
