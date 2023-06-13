@@ -14,8 +14,8 @@ from .pfCommand.pfPackage import pfPackage
 from .pfCommand.pfQfs import pfQfs
 from .pfCommand.pfReverse import pfReverse
 
+from .SCons import SConsEnvironment
 from .pfConfig import pfConfig
-from .pfSconsEnvironment import Environment
 from .pfUtils import pfUtils
 
 from semver import Version

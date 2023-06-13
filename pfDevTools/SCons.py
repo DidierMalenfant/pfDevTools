@@ -7,7 +7,7 @@ from pfDevTools.pfBuildCore import pfBuildCore
 import SCons.Environment
 
 
-def Environment(**kwargs):
+def SConsEnvironment(**kwargs):
     env = SCons.Environment.Environment(**kwargs)
 
     env.AddMethod(pfBuildCore.build, 'OpenFPGACore')
