@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import os
+import pfDevTools.Utils
 
-from pfDevTools.pfUtils import pfUtils
 from pfDevTools.Exceptions import ArgumentError
 
 
@@ -37,12 +37,12 @@ class pfClone:
             raise ArgumentError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
-        if pfUtils.commandExists('git') is False:
+        if pfDevTools.Utils.commandExists('git') is False:
             raise RuntimeError('You must have git installed on your machine to continue.')
 
         repo_folder = os.path.join(self._destination_folder, 'pfCoreTemplate')
         if os.path.exists(repo_folder):
-            pfUtils.deleteFolder(repo_folder, force_delete=True)
+            pfDevTools.Utils.deleteFolder(repo_folder, force_delete=True)
 
         print('Cloning core template in \'' + repo_folder + '\'.')
 
@@ -53,11 +53,11 @@ class pfClone:
 
         command_line += self._url
 
-        pfUtils.shellCommand(command_line, from_dir=self._destination_folder, silent_mode=True)
+        pfDevTools.Utils.shellCommand(command_line, from_dir=self._destination_folder, silent_mode=True)
 
         git_folder = os.path.join(repo_folder, '.git')
         if os.path.exists(git_folder):
-            pfUtils.deleteFolder(git_folder, force_delete=True)
+            pfDevTools.Utils.deleteFolder(git_folder, force_delete=True)
 
     @classmethod
     def name(cls) -> str:

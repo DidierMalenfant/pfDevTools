@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from pfDevTools.pfUtils import pfUtils
+import pfDevTools.Utils
 
 
 # -- Classes
@@ -16,7 +16,7 @@ class pfDryRun:
             raise RuntimeError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
-        pfUtils.shellCommand('scons --dry-run --tree=all --debug=explain')
+        pfDevTools.Utils.shellCommand('scons --dry-run --tree=all --debug=explain')
 
     @classmethod
     def name(cls) -> str:

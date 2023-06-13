@@ -58,7 +58,7 @@ class pfInstall:
 
     def run(self) -> None:
         if self._volume_path is None:
-            pfDevTools.pfUtils.shellCommand('scons -Q -s install')
+            pfDevTools.Utils.shellCommand('scons -Q -s install')
             return
 
         # -- In a temporary folder.

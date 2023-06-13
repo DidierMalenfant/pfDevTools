@@ -7,7 +7,7 @@ import pfDevTools
 
 from sys import platform
 
-from pfDevTools.pfUtils import pfUtils
+import pfDevTools.Utils
 
 
 # -- Classes
@@ -28,10 +28,10 @@ class pfEject:
     def run(self) -> None:
         if not os.path.exists(self._volume_path):
             raise RuntimeError(f'Volume {self._volume_path} is not mounted.')
-    
+
         if platform == "darwin":
             print(f'Ejecting {self._volume_path}.')
-            pfUtils.shellCommand(f'diskutil eject {self._volume_path}')
+            pfDevTools.Utils.shellCommand(f'diskutil eject {self._volume_path}')
         else:
             print('Ejecting volumes is only supported on macOS right now.')
 

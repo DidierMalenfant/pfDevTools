@@ -12,7 +12,7 @@ from typing import List
 
 
 # -- Classes
-class pfUtils:
+class Utils:
     @classmethod
     def _handleRemoveReadonly(cls, func, path, exc):
         excvalue = exc[1]
@@ -62,7 +62,7 @@ class pfUtils:
     @classmethod
     def commandExists(cls, command: str) -> bool:
         try:
-            pfUtils.shellCommand(f'{"where" if os.name == "nt" else "which"} {command}', silent_mode=True)
+            Utils.shellCommand(f'{"where" if os.name == "nt" else "which"} {command}', silent_mode=True)
         except Exception:
             return False
 
@@ -70,7 +70,7 @@ class pfUtils:
 
     @classmethod
     def requireCommand(cls, command: str):
-        if not pfUtils.commandExists(command):
+        if not Utils.commandExists(command):
             raise RuntimeError('❌ Cannot find command \'' + command + '\'.')
 
     @classmethod
@@ -78,7 +78,7 @@ class pfUtils:
         if os.path.exists(folder):
             if force_delete is True:
                 ignore_errors = False
-                on_error = pfUtils._handleRemoveReadonly
+                on_error = Utils._handleRemoveReadonly
             else:
                 ignore_errors = True
                 on_error = None

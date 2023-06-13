@@ -16,7 +16,7 @@ from .pfCommand.pfReverse import pfReverse
 
 from .SCons import SConsEnvironment
 from .pfConfig import pfConfig
-from .pfUtils import pfUtils
+from .Utils import Utils
 
 from semver import Version
 
