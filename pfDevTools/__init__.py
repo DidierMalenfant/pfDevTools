@@ -16,11 +16,11 @@ from .pfCommand.Package import Package
 from .pfCommand.Qfs import Qfs
 from .pfCommand.Reverse import Reverse
 
-from .SCons import SConsEnvironment
 from .CoreConfig import CoreConfig
-from .Utils import Utils
 from .Git import Git
 from .Paths import Paths
+from .SCons import SConsEnvironment
+from .Utils import Utils
 
 from semver import Version
 
