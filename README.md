@@ -122,10 +122,10 @@ A typical makefile is named `SConstruct` and for openFPGA projects can look as s
 ```python
   import pfDevTools
 
-  # -- We need pf-dev-tools version 1.x.x but at least 1.0.3.
-  pfDevTools.requires('1.0.3')
+  # -- We need pf-dev-tools version 1.x.x but at least 1.0.5.
+  pfDevTools.requires('1.0.5')
 
-  env = pfDevTools.Environment()
+  env = pfDevTools.SConsEnvironment()
   env.OpenFPGACore('src/config.toml')
 ```
 
@@ -135,9 +135,9 @@ All projects should contain at least one `core/core_top.v` file at the root of t
 
 Good examples of simple core projects can be found in the examples provided as part of the [openFPGA tutorials](https://github.com/DidierMalenfant/openFPGA-tutorials).
 
-The build environment can be customized by passing variables to the `pfDevTools.Environment()` method call like so:
+The build environment can be customized by passing variables to the `pfDevTools.SConsEnvironment()` method call like so:
 ```python
-  env = pfDevTools.Environment(PF_BUILD_FOLDER='MyBuildFolder', PF_SRC_FOLDER='MySrcFolder')
+  env = pfDevTools.SConsEnvironment(PF_BUILD_FOLDER='MyBuildFolder', PF_SRC_FOLDER='MySrcFolder')
 ```
 
 The following variables are currently supported:
