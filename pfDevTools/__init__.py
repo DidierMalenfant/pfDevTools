@@ -20,6 +20,7 @@ from .SCons import SConsEnvironment
 from .CoreConfig import CoreConfig
 from .Utils import Utils
 from .Git import Git
+from .Paths import Paths
 
 from semver import Version
 
