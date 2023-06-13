@@ -94,7 +94,7 @@ class pfCommand:
 
     @classmethod
     def printVersion(cls) -> None:
-        print('👾 pf command v' + __version__ + ' 👾')
+        print('👾 pf-dev-tools v' + __version__ + ' 👾')
 
         pfCommand.checkForUpdates()
 
