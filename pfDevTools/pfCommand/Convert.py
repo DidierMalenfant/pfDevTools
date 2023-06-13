@@ -8,7 +8,7 @@ from PIL import Image
 
 
 # -- Classes
-class pfConvert:
+class Convert:
     """A tool to install a zipped up core file onto a given volume (SD card or Pocket in USB access mode)."""
 
     def __init__(self, arguments):

@@ -29,7 +29,7 @@ class OpenFPGACore:
 
         command_line.append(env['PF_BUILD_FOLDER'])
 
-        pfDevTools.pfClone(command_line).run()
+        pfDevTools.Clone(command_line).run()
 
     @classmethod
     def _runDockerCommand(cls, image: str, command: str, build_folder: str = None, quiet: bool = True):
@@ -98,12 +98,12 @@ class OpenFPGACore:
         core_fpga_folder = env['PF_CORE_FPGA_FOLDER']
         core_verilog_files = [str(Path(str(f)).relative_to(core_fpga_folder)) for f in source]
         number_of_cpus: int = OpenFPGACore._getNumberOfDockerCPUs(env['PF_DOCKER_IMAGE'])
-        pfDevTools.pfQfs([str(source[0]), str(target[0]), f'cpus={number_of_cpus}'] + core_verilog_files[1:]).run()
+        pfDevTools.Qfs([str(source[0]), str(target[0]), f'cpus={number_of_cpus}'] + core_verilog_files[1:]).run()
 
     @classmethod
     def _installCore(cls, target, source, env):
-        pfDevTools.pfInstall([str(source[0])]).run()
-        pfDevTools.pfEject([]).run()
+        pfDevTools.Install([str(source[0])]).run()
+        pfDevTools.Eject([]).run()
 
     @classmethod
     def _copyFile(cls, target, source, env):
@@ -150,7 +150,7 @@ class OpenFPGACore:
 
     @classmethod
     def _packageCore(cls, target, source, env):
-        build_process: pfDevTools.pfPackage = pfDevTools.pfPackage([env['PF_CORE_CONFIG_FILE'], env['PF_CORE_BITSTREAM_FILE'], env['PF_BUILD_FOLDER']])
+        build_process: pfDevTools.Package = pfDevTools.Package([env['PF_CORE_CONFIG_FILE'], env['PF_CORE_BITSTREAM_FILE'], env['PF_BUILD_FOLDER']])
         print('Packaging core...')
         build_process.run()
 
@@ -189,7 +189,7 @@ def build(env, config_file: str, extra_files: List[str] = []):
     env.Command(core_output_qsf_file, [core_input_qsf_file] + dest_verilog_files, OpenFPGACore._updateQsfFile)
     env.Command(core_output_bitstream_file, [core_output_qsf_file] + dest_verilog_files + extra_dest_files, OpenFPGACore._compileBitStream)
 
-    build_process: pfDevTools.pfPackage = pfDevTools.pfPackage([config_file, core_output_bitstream_file, build_folder])
+    build_process: pfDevTools.Package = pfDevTools.Package([config_file, core_output_bitstream_file, build_folder])
     packaged_core = os.path.join(build_folder, build_process.packagedFilename())
     p = env.Command(packaged_core, build_process.dependencies(), OpenFPGACore._packageCore)
 

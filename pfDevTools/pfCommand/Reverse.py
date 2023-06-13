@@ -6,7 +6,7 @@ import os
 
 
 # -- Classes
-class pfReverse:
+class Reverse:
     """A tool to reverse the bitstream of an rbf file for an Analog Pocket core."""
 
     def __init__(self, arguments):

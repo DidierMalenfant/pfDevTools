@@ -6,7 +6,7 @@ import pfDevTools.Utils
 
 
 # -- Classes
-class pfClean:
+class Clean:
     """A tool to clean the local project."""
 
     def __init__(self, arguments):

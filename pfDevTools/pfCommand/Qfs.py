@@ -17,7 +17,7 @@ class EditingState(Enum):
     AFTER_EDIT = 3
 
 
-class pfQfs:
+class Qfs:
     """A tool to edit Quartus project files."""
 
     def __init__(self, arguments):

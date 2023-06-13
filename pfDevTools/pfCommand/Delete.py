@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 # -- Classes
-class pfDelete:
+class Delete:
     """A tool to delete a core from a given volume (SD card or Pocket in USB access mode)."""
 
     def __init__(self, arguments):
@@ -53,7 +53,7 @@ class pfDelete:
             print('Deleting ' + hidden_core_data + '...')
             self._deleteFile(hidden_core_data)
 
-        core_name = pfDelete._coreNameFrom(self._name_of_core_to_delete)
+        core_name = Delete._coreNameFrom(self._name_of_core_to_delete)
         if core_name is None:
             raise RuntimeError('Could not figure out the core name from \'' + self._name_of_core_to_delete + ' \'.')
 
@@ -61,7 +61,7 @@ class pfDelete:
             if not os.path.isdir(p):
                 continue
 
-            if pfDelete._coreNameFrom(os.path.basename(p)) == core_name:
+            if Delete._coreNameFrom(os.path.basename(p)) == core_name:
                 print('Found another implementation of the ' + core_name + ' platform, not deleting any Plaform data for this core.')
                 return
 

@@ -9,7 +9,7 @@ from pfDevTools.Exceptions import ArgumentError
 
 
 # -- Classes
-class pfClone:
+class Clone:
     """A tool to clone the Github core template."""
 
     def __init__(self, arguments):

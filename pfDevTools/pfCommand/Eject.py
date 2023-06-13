@@ -11,7 +11,7 @@ from sys import platform
 
 
 # -- Classes
-class pfEject:
+class Eject:
     """A tool to eject given volume (SD card or Pocket in USB access mode)."""
 
     def __init__(self, arguments):

@@ -4,15 +4,17 @@
 
 import sys
 
-from .pfCommand.pfClone import pfClone
-from .pfCommand.pfConvert import pfConvert
-from .pfCommand.pfDelete import pfDelete
-from .pfCommand.pfEject import pfEject
-from .pfCommand.pfInstall import pfInstall
-from .pfCommand.pfMake import pfMake
-from .pfCommand.pfPackage import pfPackage
-from .pfCommand.pfQfs import pfQfs
-from .pfCommand.pfReverse import pfReverse
+from .pfCommand.Clean import Clean
+from .pfCommand.Clone import Clone
+from .pfCommand.Convert import Convert
+from .pfCommand.Delete import Delete
+from .pfCommand.DryRun import DryRun
+from .pfCommand.Eject import Eject
+from .pfCommand.Install import Install
+from .pfCommand.Make import Make
+from .pfCommand.Package import Package
+from .pfCommand.Qfs import Qfs
+from .pfCommand.Reverse import Reverse
 
 from .SCons import SConsEnvironment
 from .CoreConfig import CoreConfig

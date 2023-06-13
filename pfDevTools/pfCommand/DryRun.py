@@ -6,7 +6,7 @@ import pfDevTools.Utils
 
 
 # -- Classes
-class pfDryRun:
+class DryRun:
     """A tool to clean the local project."""
 
     def __init__(self, arguments):

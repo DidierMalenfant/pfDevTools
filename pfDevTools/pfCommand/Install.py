@@ -14,7 +14,7 @@ from distutils.dir_util import copy_tree
 
 
 # -- Classes
-class pfInstall:
+class Install:
     """A tool to install a zipped up core file onto a given volume (SD card or Pocket in USB access mode)."""
 
     def __init__(self, arguments):

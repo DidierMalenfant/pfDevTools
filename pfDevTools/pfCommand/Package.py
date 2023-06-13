@@ -5,18 +5,15 @@
 import os
 import shutil
 import zipfile
-import pfDevTools.CoreConfig
+import pfDevTools
 
 from typing import List
 from pathlib import Path
 from datetime import date
 
-from .pfConvert import pfConvert
-from .pfReverse import pfReverse
-
 
 # -- Classes
-class pfPackage:
+class Package:
     """A tool to package an analog pocket core"""
 
     def __init__(self, arguments):
@@ -145,10 +142,10 @@ class pfPackage:
 
     def _convertImages(self, cores_folder, platforms_image_folder) -> None:
         dest_bin_file = os.path.join(platforms_image_folder, '%s.bin' % (self._config.platformShortName()))
-        pfConvert([self._config.platformImage(), dest_bin_file]).run()
+        pfDevTools.Convert([self._config.platformImage(), dest_bin_file]).run()
 
         dest_bin_file = os.path.join(cores_folder, 'icon.bin')
-        pfConvert([self._config.authorIcon(), dest_bin_file]).run()
+        pfDevTools.Convert([self._config.authorIcon(), dest_bin_file]).run()
 
     def _packageCore(self):
         packaged_filename = os.path.abspath(os.path.join(self._destination_folder, self.packagedFilename()))
@@ -198,7 +195,7 @@ class pfPackage:
 
         print('Reversing bitstream file...')
         bitstream_dest = os.path.join(cores_folder, '%s.rbf_r' % self._config.platformShortName())
-        pfReverse([self._bitstream_file, bitstream_dest]).run()
+        pfDevTools.Reverse([self._bitstream_file, bitstream_dest]).run()
 
         print('Generating definitions files...')
         self._generateDefinitionFiles(cores_folder, platforms_folder)

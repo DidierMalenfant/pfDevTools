@@ -6,7 +6,7 @@ import pfDevTools.Utils
 
 
 # -- Classes
-class pfMake:
+class Make:
     """A tool to make the local project."""
 
     def __init__(self, arguments):
