@@ -2,9 +2,14 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-# import os
+import os
 import sys
 import getopt
+import pfDevTools.Utils
+import pfDevTools.Git
+
+from semver import Version
+from pathlib import Path
 
 from pfDevTools.__about__ import __version__
 from pfDevTools.Exceptions import ArgumentError
@@ -67,6 +72,8 @@ class pfCommand:
     def main(self) -> None:
         self._command_found(self._arguments).run()
 
+        pfCommand.checkForUpdates()
+
     def printUsage(self) -> None:
         pfCommand.printVersion()
         print('')
@@ -88,3 +95,31 @@ class pfCommand:
     @classmethod
     def printVersion(cls) -> None:
         print('👾 pf command v' + __version__ + ' 👾')
+
+        pfCommand.checkForUpdates()
+
+    @classmethod
+    def checkForUpdates(cls, force_check=False):
+        try:
+            file_path = pfDevTools.Paths.appUpdateCheckFile()
+            if not force_check and not pfDevTools.Utils.fileOlderThan(file_path, time_in_seconds=(24 * 60 * 60)):
+                return
+
+            latest_version = pfDevTools.Git('github.com/DidierMalenfant/pfDevTools').getLatestVersion()
+            if latest_version is None:
+                return
+
+            os.makedirs(Path(file_path).parent, exist_ok=True)
+
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+            with open(file_path, 'w') as out_file:
+                out_file.write('check')
+
+            if latest_version > Version.parse(__version__):
+                warning = '‼️' if sys.platform == "darwin" else '!!'
+                print(f'{warning}  Version v{str(latest_version)} is available for pf-dev-tools. You have v{__version__} {warning}')
+                print('Please run \'pip install pf-dev-tools --upgrade\' to upgrade.')
+        except Exception:
+            pass
