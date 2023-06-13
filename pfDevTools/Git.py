@@ -113,7 +113,10 @@ class Git:
 
             for tag in self.listTags():
                 try:
-                    self.tag_versions.append(Version(tag))
+                    if tag.startswith('v'):
+                        tag = tag[1:]
+
+                    self.tag_versions.append(Version.parse(tag))
                 except ValueError:
                     pass
 
