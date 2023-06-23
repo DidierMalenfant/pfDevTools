@@ -36,15 +36,14 @@ class Clone:
             raise ArgumentError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
-        repo_folder = os.path.join(self._destination_folder, 'pfCoreTemplate')
-        if os.path.exists(repo_folder):
-            pfDevTools.Utils.deleteFolder(repo_folder, force_delete=True)
+        if os.path.exists(self._destination_folder):
+            raise RuntimeError('Folder \'' + self._destination_folder + '\' already exists.')
 
-        print('Cloning core template in \'' + repo_folder + '\'.')
+        print(f'Cloning core template in \'{self._destination_folder}\'.')
 
-        pfDevTools.Git(self._url).cloneIn(repo_folder, self._tag_name)
+        pfDevTools.Git(self._url).cloneIn(self._destination_folder, self._tag_name)
 
-        git_folder = os.path.join(repo_folder, '.git')
+        git_folder = os.path.join(self._destination_folder, '.git')
         if os.path.exists(git_folder):
             pfDevTools.Utils.deleteFolder(git_folder, force_delete=True)
 
@@ -54,5 +53,5 @@ class Clone:
 
     @classmethod
     def usage(cls) -> None:
-        print('   clone <url> <tag=name> dest_folder    - Clone repo at url, optionally at a given tag/branch.')
+        print('   clone <url> <tag=name> dest_folder    - Clone core template repo or repo at url optionally at a given tag/branch.')
         print('                                           (url defaults to pfCoreTemplate\'s repo if missing).')
