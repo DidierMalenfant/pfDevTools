@@ -9,6 +9,7 @@ import pfDevTools
 
 from typing import List
 from pathlib import Path
+from distutils.dir_util import copy_tree
 
 
 # -- Classes
@@ -27,9 +28,28 @@ class OpenFPGACore:
         if tag is not None:
             command_line.append(f'tag={tag}')
 
-        command_line.append(env['PF_BUILD_FOLDER'])
+        repo_folder = env['PF_CORE_TEMPLATE_FOLDER']
+        command_line.append(repo_folder)
+
+        if os.path.exists(repo_folder):
+            pfDevTools.Utils.deleteFolder(repo_folder, force_delete=True)
 
         pfDevTools.Clone(command_line).run()
+
+    @classmethod
+    def _copyRepo(cls, target, source, env):
+        src_folder = os.path.expanduser(env['PF_CORE_TEMPLATE_REPO_FOLDER'])
+        dest_folder = env['PF_CORE_TEMPLATE_FOLDER']
+
+        if not os.path.exists(src_folder) or not os.path.isdir(src_folder):
+            raise RuntimeError(f'Cannot find \'{src_folder}\' to copy core tmeplate repo from.')
+
+        print(f'Copying core template repo from \'{src_folder}\'.')
+
+        if os.path.exists(dest_folder):
+            pfDevTools.Utils.deleteFolder(dest_folder, force_delete=True)
+
+        copy_tree(src_folder, dest_folder)
 
     @classmethod
     def _runDockerCommand(cls, image: str, command: str, build_folder: str = None, quiet: bool = True):
@@ -168,7 +188,8 @@ def build(env, config_file: str, extra_files: List[str] = []):
 
     env.Replace(PF_CORE_CONFIG_FILE=config_file)
 
-    core_template_folder: str = os.path.join(build_folder, 'pfCoreTemplate')
+    core_template_folder: str = os.path.join(build_folder, '_core_template_repo')
+    env.Replace(PF_CORE_TEMPLATE_FOLDER=core_template_folder)
 
     core_fpga_folder: str = os.path.join(core_template_folder, 'src', 'fpga')
     env.Replace(PF_CORE_FPGA_FOLDER=core_fpga_folder)
@@ -181,7 +202,10 @@ def build(env, config_file: str, extra_files: List[str] = []):
 
     dest_verilog_folder: str = os.path.join(core_fpga_folder, 'core')
 
-    env.Command(core_input_qsf_file, '', OpenFPGACore._cloneRepo)
+    if env.get('PF_CORE_TEMPLATE_REPO_FOLDER', None) is None:
+        env.Command(core_input_qsf_file, '', OpenFPGACore._cloneRepo)
+    else:
+        env.Command(core_input_qsf_file, '', OpenFPGACore._copyRepo)
 
     dest_verilog_files: List[str] = OpenFPGACore._searchSourceFiles(env, src_folder, dest_verilog_folder)
     extra_dest_files: List[str] = OpenFPGACore._addExtraFiles(env, src_folder, dest_verilog_folder, extra_files)
