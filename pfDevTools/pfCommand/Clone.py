@@ -16,25 +16,23 @@ class Clone:
     def __init__(self, arguments):
         """Constructor based on command line arguments."""
 
+        self._destination_folder: str = None
         self._tag_name: str = None
         self._url: str = 'github.com/DidierMalenfant/pfCoreTemplate'
 
         nb_of_arguments = len(arguments)
-        if nb_of_arguments == 1 or nb_of_arguments == 3:
-            self._url: str = arguments[0]
+        while nb_of_arguments:
+            if nb_of_arguments == 1:
+                self._destination_folder: str = arguments[0]
+            elif arguments[0].startswith('tag='):
+                self._tag_name = arguments[0][4:]
+            else:
+                self._url: str = arguments[0]
+
             nb_of_arguments -= 1
             arguments = arguments[1:]
 
-        if nb_of_arguments == 0:
-            self._destination_folder: str = arguments[0]
-        elif nb_of_arguments == 2:
-            if arguments[0].startswith('tag='):
-                self._tag_name = arguments[0][4:]
-            else:
-                raise ArgumentError('Invalid cloning arguments. Maybe start with `pf --help?')
-
-            self._destination_folder: str = arguments[1]
-        else:
+        if self._destination_folder is None:
             raise ArgumentError('Invalid arguments. Maybe start with `pf --help?')
 
     def run(self) -> None:
