@@ -145,6 +145,8 @@ The following variables are currently supported:
 - `PF_DOCKER_IMAGE` - Name of the **Docker** image used to compile the core's bitstream. Defaults to `didiermalenfant/quartus:22.1-apple-silicon`.
 - `PF_SRC_FOLDER` - Root folder for all the **Verilog** source files for the project. Defaults to the folder where the `toml` config [file]](#core-config-file-format) is located.
 - `PF_BUILD_FOLDER` - Folder where intermediate build files are created. Defaults to `_build`.
+- `PF_CORE_TEMPLATE_REPO_URL` - Repo url to use instead of the default core template repo at `github.com/DidierMalenfant/pfCoreTemplate`.
+- `PF_CORE_TEMPLATE_REPO_TAG` - Repo tag to use to clone the core template repo.
 - `PF_CORE_TEMPLATE_REPO_FOLDER` - Path to a local core template folder to copy instead of cloning a repo.
 
 ### Core config file format
